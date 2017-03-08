@@ -1,0 +1,52 @@
+package main
+
+import (
+	"fmt"
+	"time"
+)
+
+func main() {
+	resutl := 0
+
+	startTime := time.Now()
+	for i := 0; i <= 40; i++ {
+		resutl = fib(i)
+		fmt.Printf("fib(%d) is: %d\n", i, resutl)
+	}
+
+	fmt.Println(time.Since(startTime))
+
+	startTime = time.Now()
+	var f = fib2()
+	for i := 0; i <= 400; i++ {
+		fmt.Printf("fib2(%d) is: %d\n", i, f(i))
+	}
+	fmt.Println(time.Since(startTime))
+
+	//结果时间相差好几个数量级，基数越大越明显。
+	//由于go的函数式编程，函数A，返回你命函数的时候，再屌用你命函数，
+	//在这个你命函数用到A的变量可以持久保存
+}
+
+func fib(n int) (res int) {
+	if n <= 1 {
+		res = 1
+	} else {
+		res = fib(n-1) + fib(n-2)
+	}
+	return
+}
+
+func fib2() func(int) int {
+	var x1, x2 int
+
+	return func(i int) int {
+		if i <= 1 {
+			x1, x2 = 1, 1
+		} else {
+			x1, x2 = x2, x1+x2
+		}
+
+		return x2
+	}
+}
